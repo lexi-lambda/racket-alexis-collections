@@ -16,7 +16,7 @@
          ; some functions need some aditional contracts
          (contract-out
           [empty? (sequence? . -> . boolean?)]
-          [ref (sequence? exact-nonnegative-integer? . -> . any)]
+          [sequence-ref (sequence? exact-nonnegative-integer? . -> . any)]
           [second (sequence? . -> . any)]
           [third (sequence? . -> . any)]
           [fourth (sequence? . -> . any)]
@@ -65,7 +65,7 @@
 ;; fallback implementations
 ;; ---------------------------------------------------------------------------------------------------
 
-(define (-ref sequence index)
+(define (-sequence-ref sequence index)
   (let loop ([seq sequence]
              [n index])
     (cond
@@ -152,7 +152,7 @@
   (empty? sequence)
   
   ; derived
-  (ref sequence index)
+  (sequence-ref sequence index)
   (append sequence . rest)
   (reverse sequence)
   (filter pred sequence)
@@ -163,7 +163,7 @@
   (sequence->list sequence)
   
   #:fallbacks
-  [(define ref -ref)
+  [(define sequence-ref -sequence-ref)
    (define append -append)
    (define reverse -reverse)
    (define filter -filter)
@@ -176,7 +176,7 @@
     (define first list:first)
     (define rest list:rest)
     (define empty? list:empty?)
-    (define ref list-ref)
+    (define sequence-ref list-ref)
     (define append (type-switch list? base:append -append))
     (define reverse base:reverse)
     (define filter base:filter)
@@ -190,7 +190,7 @@
     (define (first s) (vector-ref s 0))
     (define (rest s) (vector-copy s 1))
     (define (empty? s) (zero? (vector-length s)))
-    (define ref vector-ref)
+    (define sequence-ref vector-ref)
     (define append (type-switch vector? vector-append -append))
     ; is there any performant way to reverse a vector?
     ; (define reverse ...)
@@ -208,7 +208,7 @@
     (define (first s) (string-ref s 0))
     (define (rest s) (substring s 1))
     (define (empty? s) (zero? (string-length s)))
-    (define ref string-ref)
+    (define sequence-ref string-ref)
     (define append string-append)
     (define (filter proc s) (list->string (filter proc (string->list s))))
     ; I can't think of a better implementation for map on strings.
@@ -225,7 +225,7 @@
     (define (first s) (bytes-ref s 0))
     (define (rest s) (subbytes s 1))
     (define (empty? s) (zero? (bytes-length s)))
-    (define ref bytes-ref)
+    (define sequence-ref bytes-ref)
     (define append bytes-append)
     (define (filter proc s) (list->bytes (filter proc (bytes->list s))))
     ; I can't think of a better implementation for map on byte strings.
@@ -238,7 +238,7 @@
     (define first stream-first)
     (define rest stream-rest)
     (define empty? stream-empty?)
-    (define ref stream-ref)
+    (define sequence-ref stream-ref)
     (define append (type-switch stream? stream-append -append))
     (define filter stream-filter)
     (define map (type-switch* 1 stream? stream-map -map))
@@ -252,7 +252,7 @@
     (define (first s) (stream-first (base:sequence->stream s)))
     (define (rest s) (stream-rest (base:sequence->stream s)))
     (define (empty? s) (stream-empty? (base:sequence->stream s)))
-    (define ref sequence:sequence-ref)
+    (define sequence-ref sequence:sequence-ref)
     (define append (type-switch sequence? sequence:sequence-append -append))
     (define filter sequence:sequence-filter)
     (define map (type-switch* 1 sequence? sequence:sequence-map -map))
@@ -263,15 +263,15 @@
 ;; additional API
 ;; ---------------------------------------------------------------------------------------------------
 
-(define (second seq) (ref seq 1))
-(define (third seq) (ref seq 2))
-(define (fourth seq) (ref seq 3))
-(define (fifth seq) (ref seq 4))
-(define (sixth seq) (ref seq 5))
-(define (seventh seq) (ref seq 6))
-(define (eighth seq) (ref seq 7))
-(define (ninth seq) (ref seq 8))
-(define (tenth seq) (ref seq 9))
+(define (second seq) (sequence-ref seq 1))
+(define (third seq) (sequence-ref seq 2))
+(define (fourth seq) (sequence-ref seq 3))
+(define (fifth seq) (sequence-ref seq 4))
+(define (sixth seq) (sequence-ref seq 5))
+(define (seventh seq) (sequence-ref seq 6))
+(define (eighth seq) (sequence-ref seq 7))
+(define (ninth seq) (sequence-ref seq 8))
+(define (tenth seq) (sequence-ref seq 9))
 
 (define-syntax-rule (in seq)
   (in-stream (sequence->stream seq)))

@@ -2,9 +2,11 @@
 
 (require
   alexis/collection/countable
+  alexis/collection/indexable
   alexis/collection/sequence)
 
 (provide
  (all-from-out
   alexis/collection/countable
+  alexis/collection/indexable
   alexis/collection/sequence))

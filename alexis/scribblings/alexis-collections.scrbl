@@ -2,6 +2,7 @@
 
 @(require (for-label alexis/collection+base
                      (prefix-in base: racket/base)
+                     (only-in racket/dict dict-ref)
                      (only-in racket/stream in-stream)
                      racket/contract
                      racket/generic)
@@ -87,6 +88,39 @@ A predicate that identifies if @racket[v] is @tech{countable}.}
 Returns the number of discrete elements contained by @racket[collection]. If @racket[collection] is
 infinite, then this function does not terminate.}
 
+@section{Indexable Collections}
+
+@defmodule[alexis/collection/indexable]
+
+Data structures are @deftech{indexable} if they provide any sort of indexed data.
+
+@defthing[gen:indexable any/c]{
+
+A @reftech{generic interface} that defines exactly one function, @racket[ref], which accepts an
+instance of @racket[gen:indexable] and an index.
+
+@margin-note{
+Although @reftech{dictionaries} are @tech{indexable}, using @racket[ref] with @reftech{association
+lists} will likely not work as you would expect, since they will use @racket[list-ref] instead of
+@racket[dict-ref].}
+
+All @tech{generic sequences} are also @tech{indexable}, so implementations of @racket[gen:sequence] do
+@italic{not} need to implement @racket[gen:indexable]. Additionally, @reftech{hash tables} and
+@reftech{dictionaries} are indexable.
+
+@(examples
+  #:eval (evaluator)
+  (ref '(a b c) 1)
+  (ref (hash 'foo "bar") 'foo))}
+
+@defproc[(indexable? [v any/c]) boolean?]{
+
+A predicate that identifies if @racket[v] is @tech{indexable}.}
+
+@defproc[(ref [collection indexable?] [index any/c]) any]{
+
+Returns the value associated with the provided @racket[index] for the given @racket[collection].}
+
 @section{Generic Sequences}
 
 @defmodule[alexis/collection/sequence]
@@ -114,7 +148,7 @@ The required methods are the following four functions:
 The derived methods are as follows:
 
 @itemlist[
-  @item{@racket[ref] — Gets a value from an arbitrary position in a sequence.}
+  @item{@racket[sequence-ref] — Gets a value from an arbitrary position in a sequence.}
   @item{@racket[append] — Appends two sequences together.}
   @item{@racket[reverse] — Reverses a sequence.}
   @item{@racket[filter] — Filters elements from a sequence.}
@@ -180,7 +214,11 @@ Returns @racket[#t] if @racket[sequence] contains no elements, otherwise @racket
 
 @subsection{Derived Functions}
 
-@defproc[(ref [sequence sequence?] [index exact-nonnegative-integer?]) any]{
+@defproc[(sequence-ref [sequence sequence?] [index exact-nonnegative-integer?]) any]{
+
+@margin-note{
+All @tech{generic sequences} are also @tech{indexable}, so @racket[ref] can be used in place of
+@racket[sequence-ref] when performing indexing on sequences.}
 
 Gets the element at @racket[index] in @racket[sequence]. @tech{Generic sequences} are strictly
 @italic{ordered}, so @racket[index] must be numeric.}
@@ -232,8 +270,8 @@ overridden. They are implemented in terms of the methods of @racket[gen:sequence
               @defproc[(tenth [sequence sequence?]) any])]{
 
 Access various elements of @racket[sequence], as would be expected. These are implemented using
-@racket[ref], so a random-access implementation of @racket[ref] will make these random-access as
-well.}
+@racket[sequence-ref], so a random-access implementation of @racket[sequence-ref] will make these
+random-access as well.}
 
 @subsection{Other Functions and Forms}
 
