@@ -1,6 +1,7 @@
 #lang racket/base
 
-(require (prefix-in base: racket/base)
+(require (for-syntax racket/base)
+         (prefix-in base: racket/base)
          (prefix-in list: racket/list)
          (prefix-in sequence: racket/sequence)
          racket/generic
@@ -273,5 +274,24 @@
 (define (ninth seq) (sequence-ref seq 8))
 (define (tenth seq) (sequence-ref seq 9))
 
-(define-syntax-rule (in seq)
-  (in-stream (sequence->stream seq)))
+(define in/proc
+  (procedure-rename
+   (λ (seq) (in-stream (sequence->stream seq)))
+   'in))
+
+(define-sequence-syntax in
+  (λ () #'in/proc)
+  (λ (stx)
+    (syntax-case stx ()
+      [[(e) (_ seq)]
+       #'[(e)
+          (:do-in
+           ([(s) seq])
+           (unless (sequence? s)
+             (raise-argument-error 'in "sequence?" s))
+           ([v s])
+           (not (empty? v))
+           ([(e) (first v)]
+            [(r) (rest v)])
+           #t #t
+           [r])]])))

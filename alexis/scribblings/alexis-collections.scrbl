@@ -289,8 +289,9 @@ implementation of @racket[empty?].}
 
 @defproc[(in [sequence sequence?]) base:sequence?]{
 
-Identical to @racket[(in-stream (sequence->stream sequence))]. Provided as a convenience for iterating
-through @tech{generic sequences} in @racket[for] forms.}
+Identical to @racket[(in-stream (sequence->stream sequence))] when used as a procedure. When used
+directly as a sequence in a @racket[for] loop, no conversion to a stream takes place—instead, the
+sequence is iterated directly using @racket[first] and @racket[rest].}
 
 @defproc[(pair [a any/c] [d any/c]) pair?]{
 
