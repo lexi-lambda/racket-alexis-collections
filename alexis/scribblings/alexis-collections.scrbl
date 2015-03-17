@@ -35,8 +35,9 @@ One notable exception to this rule is @racket[cons], which is overriden by
 @racket[pair]. Also, if you for some reason aren't including @racketmodname[racket/base] via
 @tt{#lang}, you can use @racketmodname[alexis/collection+base] instead.
 
-Also, @racketmodname[alexis/collection] exports the bindings from both
-@racketmodname[alexis/collection/countable] and @racketmodname[alexis/collection/sequence].
+Also, @racketmodname[alexis/collection] exports the bindings from
+@racketmodname[alexis/collection/countable], @racketmodname[alexis/collection/indexable],
+and @racketmodname[alexi/collection/sequence].
 
 @section{Countable Collections}
 
