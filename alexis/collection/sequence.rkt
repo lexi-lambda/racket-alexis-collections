@@ -12,11 +12,20 @@
          cons first rest
          append reverse filter map
          sequence->stream sequence->list
-         in-sequence
+         in
          ; some functions need some aditional contracts
          (contract-out
           [empty? (sequence? . -> . boolean?)]
-          [ref (sequence? exact-nonnegative-integer? . -> . any)])
+          [ref (sequence? exact-nonnegative-integer? . -> . any)]
+          [second (sequence? . -> . any)]
+          [third (sequence? . -> . any)]
+          [fourth (sequence? . -> . any)]
+          [fifth (sequence? . -> . any)]
+          [sixth (sequence? . -> . any)]
+          [seventh (sequence? . -> . any)]
+          [eighth (sequence? . -> . any)]
+          [ninth (sequence? . -> . any)]
+          [tenth (sequence? . -> . any)])
          ; pair is cons from racket/base
          (rename-out [base:cons pair]))
 
@@ -254,5 +263,15 @@
 ;; additional API
 ;; ---------------------------------------------------------------------------------------------------
 
-(define-syntax-rule (in-sequence seq)
+(define (second seq) (ref seq 1))
+(define (third seq) (ref seq 2))
+(define (fourth seq) (ref seq 3))
+(define (fifth seq) (ref seq 4))
+(define (sixth seq) (ref seq 5))
+(define (seventh seq) (ref seq 6))
+(define (eighth seq) (ref seq 7))
+(define (ninth seq) (ref seq 8))
+(define (tenth seq) (ref seq 9))
+
+(define-syntax-rule (in seq)
   (in-stream (sequence->stream seq)))

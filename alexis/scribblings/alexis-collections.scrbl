@@ -216,6 +216,25 @@ representation.}
 Converts a @tech{generic sequence} to a @reftech{list}. This may be more eager than using
 @racket[sequence->stream].}
 
+@subsection{Sequence API Functions}
+
+These functions operate on sequences, but are not part of the generic interface and cannot be
+overridden. They are implemented in terms of the methods of @racket[gen:sequence].
+
+@deftogether[(@defproc[(second [sequence sequence?]) any]
+              @defproc[(third [sequence sequence?]) any]
+              @defproc[(fourth [sequence sequence?]) any]
+              @defproc[(fifth [sequence sequence?]) any]
+              @defproc[(sixth [sequence sequence?]) any]
+              @defproc[(seventh [sequence sequence?]) any]
+              @defproc[(eight [sequence sequence?]) any]
+              @defproc[(ninth [sequence sequence?]) any]
+              @defproc[(tenth [sequence sequence?]) any])]{
+
+Access various elements of @racket[sequence], as would be expected. These are implemented using
+@racket[ref], so a random-access implementation of @racket[ref] will make these random-access as
+well.}
+
 @subsection{Other Functions and Forms}
 
 @defthing[prop:sequence-empty structure-type-property?]{
@@ -230,7 +249,7 @@ Obviously, specifying an incorrect value for this property cannot be checked by 
 so behavior is undefined if the value of @racket[prop:sequence-empty] is inconsistent with the
 implementation of @racket[empty?].}
 
-@defproc[(in-sequence [sequence sequence?]) base:sequence?]{
+@defproc[(in [sequence sequence?]) base:sequence?]{
 
 Identical to @racket[(in-stream (sequence->stream sequence))]. Provided as a convenience for iterating
 through @tech{generic sequences} in @racket[for] forms.}
