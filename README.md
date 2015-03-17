@@ -5,7 +5,7 @@ This package provides **generic collections** for Racket. Despite Racket's relat
 
 Now, however, Racket has *generics*, and this aims to provide a nicer front-end to the existing collections library in a way that makes use of that functionality.
 
-[**See the docs for more information.**](pkg-build.racket-lang.org/doc/alexis-collections/)
+[**See the docs for more information.**](http://pkg-build.racket-lang.org/doc/alexis-collections/)
 
 ## Examples
 
