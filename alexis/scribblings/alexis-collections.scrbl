@@ -37,7 +37,7 @@ One notable exception to this rule is @racket[cons], which is overriden by
 
 Also, @racketmodname[alexis/collection] exports the bindings from
 @racketmodname[alexis/collection/countable], @racketmodname[alexis/collection/indexable],
-and @racketmodname[alexi/collection/sequence].
+and @racketmodname[alexis/collection/sequence].
 
 @section{Countable Collections}
 
