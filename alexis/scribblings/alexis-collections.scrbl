@@ -1,9 +1,9 @@
 #lang scribble/manual
 
-@(require (for-label alexis/collection+base
+@(require racket/require
+          (for-label (subtract-in racket/base alexis/collection)
                      (prefix-in base: racket/base)
-                     (only-in racket/dict dict-ref)
-                     (only-in racket/stream in-stream)
+                     alexis/collection
                      racket/contract
                      racket/generic
                      racket/require)
