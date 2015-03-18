@@ -14,7 +14,7 @@
 (provide (all-from-out alexis/collection/sequence/constructed
                        alexis/collection/sequence/flat)
          gen:sequence sequence? sequence/c
-         first append reverse filter map in
+         first append reverse filter map
          ; some functions need some aditional contracts
          (contract-out
           [empty? (sequence? . -> . boolean?)]
@@ -73,25 +73,3 @@
 (define (eighth seq) (sequence-ref seq 7))
 (define (ninth seq) (sequence-ref seq 8))
 (define (tenth seq) (sequence-ref seq 9))
-
-(define in/proc ; XXX: broken since sequence->stream is no longer in gen:sequence
-  (procedure-rename
-   (λ (seq) (in-stream (sequence->stream seq)))
-   'in))
-
-(define-sequence-syntax in
-  (λ () #'in/proc)
-  (λ (stx)
-    (syntax-case stx ()
-      [[(e) (_ seq)]
-       #'[(e)
-          (:do-in
-           ([(s) seq])
-           (unless (sequence? s)
-             (raise-argument-error 'in "sequence?" s))
-           ([v s])
-           (not (empty? v))
-           ([(e) (first v)]
-            [(r) (rest v)])
-           #t #t
-           [r])]])))
