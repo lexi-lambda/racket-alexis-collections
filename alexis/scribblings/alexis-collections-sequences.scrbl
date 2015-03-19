@@ -20,7 +20,36 @@ more ad-hoc system.
 Sequences are @italic{ordered collections}, and they may be finite or infinite. They are divided into
 two primary categories, @tech{constructed sequences} and @tech{flat sequences}.
 
-@; TODO: include pict-y thing demonstrating the sequence interface hierarchy
+Below is a graphical representation of the sequence hierarchy.
+
+@(require racket/function
+          pict
+          pict/code
+          pict/tree-layout)
+
+@(define (boxed-code stx)
+   (parameterize ([get-current-code-font-size (thunk 12)]
+                  [current-code-font '(aligned bold . modern)])
+     (frame #:line-width 1.5
+            (clip (pin-under (inset/clip (typeset-code stx) 15 7)
+                             0 0 (colorize (filled-rectangle 1000 1000) "white"))))))
+
+@(inset
+  (frame
+   (inset/clip
+    (naive-layered
+     #:x-spacing 10
+     (tree-layout
+      #:pict (boxed-code #'gen:sequence)
+      (tree-layout
+       #:pict (boxed-code #'gen:constructed-sequence))
+      (tree-layout
+       #:pict (boxed-code #'gen:flat-sequence)
+       (tree-layout
+        #:pict (boxed-code #'gen:flat-immutable-sequence))
+       (tree-layout
+        #:pict (boxed-code #'gen:flat-mutable-sequence)))))
+    30)) 0 10)
 
 @local-table-of-contents[]
 
