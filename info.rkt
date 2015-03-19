@@ -10,4 +10,5 @@
 (define build-deps
   '("scribble-lib"
     "racket-doc"
+    "pict-lib"
     "cover"))
