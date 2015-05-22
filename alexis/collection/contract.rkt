@@ -36,8 +36,7 @@
    [first (λ (first) (and first (redir-proc first first*)))]
    [rest (λ (rest) (and rest (redir-proc rest rest*)))]
    [nth (λ (nth) (and nth (redir-proc nth nth*)))]
-   [reverse (λ (reverse) (and reverse (redir-proc reverse reverse*)))]
-   #:properties props))
+   [reverse (λ (reverse) (and reverse (redir-proc reverse reverse*)))]))
 
 ;; ---------------------------------------------------------------------------------------------------
 
