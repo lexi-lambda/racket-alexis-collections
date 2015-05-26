@@ -32,7 +32,7 @@
 
 (define (check-sequenceof! ctc val blame)
   (unless (sequence? val)
-    (raise-blame-error blame val '(expected "a sequence" given: "~e") val)))
+    (raise-blame-error blame val '(expected: "a sequence" given: "~e") val)))
 
 (define ((sequenceof-first-order ctc) val)
   (sequence? val))
