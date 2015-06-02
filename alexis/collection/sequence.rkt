@@ -9,7 +9,9 @@
   alexis/collection/contract
   alexis/util/match
   racket/generic
-  racket/contract)
+  racket/contract
+  racket/stream
+  racket/promise)
 
 (provide
  (contract-out
@@ -36,7 +38,12 @@
                     [result sequence?])]
   [subsequence* (sequence? exact-nonnegative-integer? exact-nonnegative-integer? . -> . sequence?)]
   [sequence->string ((sequenceof char?) . -> . (and/c string? sequence?))]
-  [sequence->bytes ((sequenceof byte?) . -> . (and/c bytes? sequence?))]))
+  [sequence->bytes ((sequenceof byte?) . -> . (and/c bytes? sequence?))]
+  [flatten (sequence? . -> . sequence?)]
+  [append-map (->i ([proc (seqs) (and/c (procedure-arity-includes/c (length seqs))
+                                        (unconstrained-domain-> sequence?))])
+                   #:rest [seqs (non-empty-listof sequence?)]
+                   [result sequence?])]))
 
 ; like map, but strict, returns void, and is only for side-effects
 (define (for-each proc . seqs)
@@ -159,6 +166,36 @@
     (when (> (+ start len) (length seq))
       (raise-range-error 'subsequence* "sequence" "end " (+ start len) seq 0 (length seq))))
   (take len (drop start seq)))
+
+;; to flatten just delay every step
+(struct delayed-seq (promise)
+        #:reflection-name 'lazy-sequence
+        #:methods gen:sequence
+        [(define/generic -empty? empty?)
+         (define/generic -first first)
+         (define/generic -rest rest)
+         (define/match* (empty? (delayed-seq p))
+           (-empty? (force p)))
+         (define/match* (first (delayed-seq p))
+           (-first (force p)))
+         (define/match* (rest (delayed-seq p))
+           (-rest (force p)))])
+
+(define (flatten seq)
+  (delayed-seq
+   (delay
+     (cond [(empty? seq) empty-stream]
+           [(sequence? (first seq))
+            (append (flatten (first seq))
+                    (flatten (rest seq)))]
+           [else (append (list (first seq))
+                         (flatten (rest seq)))]))))
+
+(define (append-map f . seqs)
+  (for*/sequence ([seq seqs]
+                  [elem seq]
+                  [res (f elem)])
+    res))
 
 ; some conversion functions for non-collections
 (define (sequence->string seq)
