@@ -333,6 +333,21 @@ together using @racket[or] like @racket[foldl].
   (ormap symbol? '(1 a 3 4))
   (ormap values '(#f a #f #f)))}
 
+@defproc[(flatten [s sequence?]) sequence?]{
+Flattens a potentially nested sequence into a sequence of flat values.
+
+@(coll-examples
+  (flatten '((a) b (c (d) . e) ()))
+  (sequence->list (flatten '((a) b (c (d) . e) ())))
+  (sequence->list (flatten '((((()()()))(((()))())))))
+  (sixth (flatten (repeat 1))))}
+
+@defproc[(append-map [f procedure?] [seq sequence?] ...+) sequence?]{
+Like @racket[(apply append (map f seq ...))].
+
+@(coll-examples
+  (sequence->list (append-map values '((1) (2) (3)))))}
+
 @deftogether[(@defproc[(second [coll collection?]) any/c]
               @defproc[(third [coll collection?]) any/c]
               @defproc[(fourth [coll collection?]) any/c]

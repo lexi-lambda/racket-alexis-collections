@@ -9,7 +9,8 @@
   '("base"
     "unstable-list-lib"
     "rackunit-lib"
-    "alexis-util"))
+    "alexis-util"
+    "sandbox-lib"))
 (define build-deps
   '("scribble-lib"
     "racket-doc"

@@ -5,7 +5,8 @@
   alexis/collection
   racket/function
   racket/stream
-  racket/port)
+  racket/port
+  racket/sandbox)
 
 (test-case
  "Side-effectful for-each"
@@ -43,3 +44,21 @@
  "Sequence to string and bytestring conversions"
  (check-equal? (sequence->string #(#\a #\b #\c)) "abc")
  (check-equal? (sequence->bytes #(1 2 3)) #"\1\2\3"))
+
+(test-case
+ "Flattening operations"
+ (check-true (empty? (flatten '((((()))))))
+             "flattening only empty lists should be empty")
+ (check-not-exn 
+  (lambda ()
+    (call-with-limits 10 #f
+                      (lambda () (flatten (repeat '())))))
+  "this needs to terminate, even though its useless")
+ (check-equal? (sequence->list (flatten '((1 2) 3 (((4))))))
+               '(1 2 3 4)
+               "basic flattening test")
+ (check-equal? (nth (flatten (repeat (repeat '(1)))) 1000)
+               1
+               "flattening infinite lists")
+ (check-equal? (second (append-map values (repeat (repeat 1))))
+               1))
