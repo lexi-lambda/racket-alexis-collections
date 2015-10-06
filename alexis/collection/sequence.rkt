@@ -48,6 +48,7 @@
   [flatten (sequence? . -> . sequence?)]
   [chunk (exact-nonnegative-integer? sequence? . -> . sequence?)]
   [chunk* (exact-nonnegative-integer? sequence? . -> . sequence?)]
+  [cartesian-product ([] #:rest (listof sequence?) . ->* . (sequenceof sequence?))]
   [generate-sequence (generator? . -> . sequence?)]
   [sequence->string ((sequenceof char?) . -> . (and/c string? sequence?))]
   [sequence->bytes ((sequenceof byte?) . -> . (and/c bytes? sequence?))]
@@ -257,6 +258,18 @@
       (let ([head (take n seq)]
             [tail (drop n seq)])
         (stream-cons head (chunk* n tail)))))
+
+; https://en.wikipedia.org/wiki/Cartesian_product
+; distributes out the sequences, as if the input is a product of sums,
+; and the output is a sum of products
+; example:
+;   ((a) (b c) (1 2 3))
+;   ->
+;   ((a b 1) (a b 2) (a b 3) (a c 1) (a c 2) (a c 3))
+(define (cartesian-product . seqs)
+  (define (cp-2 as bs)
+    (for*/sequence ([i (in as)] [j (in bs)]) (stream-cons i j)))
+  (foldr cp-2 (list empty-stream) seqs))
 
 ; creates a sequence by lazily pulling values from a generator
 (define (generate-sequence g)
