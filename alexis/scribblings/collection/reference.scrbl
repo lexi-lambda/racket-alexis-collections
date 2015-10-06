@@ -425,6 +425,15 @@ Like @racket[(apply append (map f seq ...))].
 @(coll-examples
   (sequence->list (append-map values '((1) (2) (3)))))}
 
+@defproc[(cartesian-product [seq sequence?] ...) (sequenceof sequence?)]{
+Computes the n-ary cartesian product of the given lists. If the given @racket[seq]s are a product of
+sums, then it will distribute them out into a sum of products.
+(See @url{https://en.wikipedia.org/wiki/Cartesian_product})
+@(coll-examples
+  (sequence->list* (cartesian-product '(1 2) '(a b) '(c d)))
+  (sequence->list* (cartesian-product '(a) '(1 2 3)))
+  (sequence->list* (cartesian-product '(4 5 6) '(d e f) '(#t #f))))}
+
 @deftogether[(@defproc[(second [seq sequence?]) any/c]
               @defproc[(third [seq sequence?]) any/c]
               @defproc[(fourth [seq sequence?]) any/c]
