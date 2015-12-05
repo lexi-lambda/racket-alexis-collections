@@ -3,7 +3,6 @@
 (require
   rackunit
   alexis/collection
-  alexis/collection/contract
   racket/contract
   racket/function
   racket/stream

@@ -5,9 +5,8 @@ sudo: false
 env:
   global:
     - RACKET_DIR: '~/racket'
-    - GH_REF: 'github.com/lexi-lambda/racket-alexis-collections.git'
-    - secure: "IfNayFLEH8JLQw+fQjNVuh8yinXRQk8vNrPfrVpWxIxefcm+RbiS+xIKe1HDMma+d314LmlAD/ENVXqsOp1MIIkB55lQIYbv8vvEqJs9xOmeDkUlLShd6eHw5//l4HeIxcn4Hn58TCRVsojrM7vJKfYm8Efxm8m40kLFEGutwj0="
   matrix:
+    - RACKET_VERSION: 6.3
     - RACKET_VERSION: HEAD
 
 before_install:
@@ -17,10 +16,10 @@ before_install:
 
 install:
   - raco pkg install --deps search-auto --name alexis-collections --link $TRAVIS_BUILD_DIR
+  - raco pkg install cover cover-coveralls
 
 script:
   - raco test -p alexis-collections
   - raco cover -bf coveralls -d $TRAVIS_BUILD_DIR/coverage -p alexis-collections
 
 after_success:
-  - bash deploy-docs.sh

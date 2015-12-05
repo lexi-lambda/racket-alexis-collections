@@ -3,14 +3,15 @@
 (define collection 'multi)
 
 (define name "alexis-collections")
-(define version "0.2.0")
+(define version "0.3.0")
+
+(define implies '("collections"))
 
 (define deps
   '("alexis-util"
     "base"
+    "collections"
     "rackunit-lib"))
 (define build-deps
-  '("cover"
-    "cover-coveralls"
-    "racket-doc"
+  '("racket-doc"
     "scribble-lib"))
