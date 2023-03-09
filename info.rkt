@@ -3,7 +3,7 @@
 (define collection 'multi)
 
 (define name "alexis-collections")
-(define version "0.3.0")
+(define version "0.3")
 
 (define implies '("collections"))
 
